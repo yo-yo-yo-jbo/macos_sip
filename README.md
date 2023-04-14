@@ -60,4 +60,38 @@ csrutil: This tool needs to be executed from Recovery OS.
 jbo@McJbo ~ #
 ```
 
-Note how I tried to turn it off and ended up with an error - the only *legitimate* way to turn it off is by booting to [Recovery Mode](https://support.apple.com/guide/mac-help/intro-to-macos-recovery-mchl46d531d6/mac).
+Note how I tried to turn it off and ended up with an error - the only *legitimate* way to turn it off is by booting to [Recovery Mode](https://support.apple.com/guide/mac-help/intro-to-macos-recovery-mchl46d531d6/mac).  
+What are SIP's responsibilities exactly? [My blogpost from 2021](https://www.microsoft.com/en-us/security/blog/2021/10/28/microsoft-finds-new-macos-vulnerability-shrootless-that-could-bypass-system-integrity-protection/) documents it nicely, but you can conclude its highlevel responsibilities by reading the [relevant XNU source code](https://opensource.apple.com/source/xnu/xnu-4570.71.2/bsd/sys/csr.h) - the SIP configuration is saved in [NVRAM variables](https://wikileaks.org/ciav7p1/cms/page_26968084.html). Specifically, the variable `csr-active-config` is what we care about. Itsaves a bitmap of capabilities:
+
+```c
+...
+
+/* Rootless configuration flags */
+#define CSR_ALLOW_UNTRUSTED_KEXTS		(1 << 0)
+#define CSR_ALLOW_UNRESTRICTED_FS		(1 << 1)
+#define CSR_ALLOW_TASK_FOR_PID			(1 << 2)
+#define CSR_ALLOW_KERNEL_DEBUGGER		(1 << 3)
+#define CSR_ALLOW_APPLE_INTERNAL		(1 << 4)
+#define CSR_ALLOW_DESTRUCTIVE_DTRACE	(1 << 5) /* name deprecated */
+#define CSR_ALLOW_UNRESTRICTED_DTRACE	(1 << 5)
+#define CSR_ALLOW_UNRESTRICTED_NVRAM	(1 << 6)
+#define CSR_ALLOW_DEVICE_CONFIGURATION	(1 << 7)
+#define CSR_ALLOW_ANY_RECOVERY_OS	(1 << 8)
+#define CSR_ALLOW_UNAPPROVED_KEXTS	(1 << 9)
+
+#define CSR_VALID_FLAGS (CSR_ALLOW_UNTRUSTED_KEXTS | \
+                         CSR_ALLOW_UNRESTRICTED_FS | \
+                         CSR_ALLOW_TASK_FOR_PID | \
+                         CSR_ALLOW_KERNEL_DEBUGGER | \
+                         CSR_ALLOW_APPLE_INTERNAL | \
+                         CSR_ALLOW_UNRESTRICTED_DTRACE | \
+                         CSR_ALLOW_UNRESTRICTED_NVRAM | \
+                         CSR_ALLOW_DEVICE_CONFIGURATION | \
+                         CSR_ALLOW_ANY_RECOVERY_OS | \
+                         CSR_ALLOW_UNAPPROVED_KEXTS)
+
+#define CSR_ALWAYS_ENFORCED_FLAGS (CSR_ALLOW_DEVICE_CONFIGURATION | CSR_ALLOW_ANY_RECOVERY_OS)
+
+...
+```
+
