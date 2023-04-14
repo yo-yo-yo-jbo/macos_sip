@@ -48,3 +48,15 @@ jbo@McJbo ~ %
 Note that this copy command ran *as root* and yet I got an annoying `Operation not permitted` error! This means root is not an omnipotent user.
 I hope this is a good motivation to research a technology that limits even the root user - also known as `SIP`.
 
+## Introduction to SIP
+The first time I noticed SIP was when I tried debugging Apple-signed binaries with `lldb` - I couldn't do that even as `root`. However, the most noticable SIP feature is by far blocking any writes on various directories, most of them under the `/System` path.  
+`SIP` stands for `System Integrity Protection`, also known as `rootless`, and has been around for quite some time, and it's responsible of hardening the system against root-level attackers. By default, it's on, but you can always check with the `csrutil` utility:
+
+```shell
+jbo@McJbo ~ # csrutil status
+System Integrity Protection status: enabled.
+jbo@McJbo ~ # csrutil disable
+csrutil: This tool needs to be executed from Recovery OS.
+jbo@McJbo ~ #
+
+Note how I tried to turn it off and ended up with an error - the only *legitimate* way to turn it off is by booting to [Recovery Mode](https://support.apple.com/guide/mac-help/intro-to-macos-recovery-mchl46d531d6/mac).
