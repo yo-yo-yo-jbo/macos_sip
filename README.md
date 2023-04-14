@@ -58,5 +58,6 @@ System Integrity Protection status: enabled.
 jbo@McJbo ~ # csrutil disable
 csrutil: This tool needs to be executed from Recovery OS.
 jbo@McJbo ~ #
+```
 
 Note how I tried to turn it off and ended up with an error - the only *legitimate* way to turn it off is by booting to [Recovery Mode](https://support.apple.com/guide/mac-help/intro-to-macos-recovery-mchl46d531d6/mac).
