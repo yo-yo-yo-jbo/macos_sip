@@ -129,3 +129,25 @@ As you can see:
 - Therefore, trying to create a file under `Speech` succeeds (note I am running as `root`) while a similar operation fails for the `SpeechBase` directory.
 - Using the `log` utility shows the source of the error - `Kernel: (Sandbox) System Policy` is the mark of SIP enforcement.
 Those of you who remember my [macOS App Sandbox blogpost](https://github.com/yo-yo-yo-jbo/macos_sandbox/) might wonder if there's a connection between SIP and the App Sandbox - and indeed, SIP is just the same Sandbox utility applied on the entire system!
+
+## How are Entitlements involved?
+Legitimately, you can't, unless you have physical access, boot into Recovery OS and open the terminal - there you can simply run `csrutil disable` and reboot.  
+Looking at SIP bypasses historically, most abused one of the most annoying macOS security features - `Entitlements`.  
+Circling back to my [macOS App Sandbox blogpost](https://github.com/yo-yo-yo-jbo/macos_sandbox/), you might remember I used a `codesign -dv --entitlements -` commandline to view the App Sandbox rules of Microsoft Word. This is no coincidence - the sandbox policy is strongly affected by the Entitlements Apps have.  
+[Entitlements](https://developer.apple.com/documentation/bundleresources/entitlements) are Apple's way of enforcing various privileges. There are tons of them. Also, they are embedded into binaries, and essentially are a part of the code signature (therefore you view them with `codesign`). Since they're signed - they cannot be (easily) forged. How is this connected to SIP?  
+Well, Apple has to run OS upgrades, which obviously have to overwrite parts of the filesystem that are SIP protected. Apparently, there are special Entitlements that can completely bypass SIP checks, with two ones that I talked about publicly in the past:
+- `com.apple.rootless.install` - a process that possesses this Entitlement can bypass filesystem enforcements completely.
+- `com.apple.rootless.install.heritable` - *all child processes* of a process with this Entitlement get `com.apple.rootless.install`.
+Historically, SIP bypasses focus on getting code to run under those two Entitlements, mostly by means of code injection (doesn't have to be traditional code injection, as it's quite hard on macOS, especially recent versions. More on that in a future blogpost).  
+If you have the appetite (and I know you do!) you can read about one such case that I responsibly disclosed [here](https://www.microsoft.com/en-us/security/blog/2021/10/28/microsoft-finds-new-macos-vulnerability-shrootless-that-could-bypass-system-integrity-protection/).  
+Entitlements are not `SIP`-focused - and indeed, similar bypasses have been used to bypass other defense-in-depth mechanisms - I will talk about it in the future.  
+If you feel really adventurous you can hunt for injections on various macOS\iOS common binaries and see if you get lucky - I highly recommend using [Jonathan Levin's Entitlement Database](http://newosxbook.com/ent.jl) which indexes a lot of the juicy Entitlements.
+
+# Summary
+Today we have described `SIP` - what it is, how it's enforced and potential ways for it to be bypasses.  
+We managed to connect this blogpost with the `macOS App Sandbox` blogpost, as well as the `Gatekeeper` blogpost, which is quite nice.
+In future blogposts, I intend to touch other macOS security mechanisms - there are many of them!
+
+Thanks!
+
+Jonathan Bar Or
