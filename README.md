@@ -30,7 +30,7 @@ We can prepare a minimal `LaunchAgent` plist file:
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StartInterval</key>
-	<integer>86400</integer>
+	<integer>300</integer>
 </dict>
 </plist>
 ```
@@ -46,3 +46,5 @@ jbo@McJbo ~ %
 ```
 
 Note that this copy command ran *as root* and yet I got an annoying `Operation not permitted` error! This means root is not an omnipotent user.
+I hope this is a good motivation to research a technology that limits even the root user - also known as `SIP`.
+
