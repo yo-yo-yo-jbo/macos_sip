@@ -143,7 +143,7 @@ If you have the appetite (and I know you do!) you can read about one such case t
 Entitlements are not `SIP`-focused - and indeed, similar bypasses have been used to bypass other defense-in-depth mechanisms - I will talk about it in the future.  
 If you feel really adventurous you can hunt for injections on various macOS\iOS common binaries and see if you get lucky - I highly recommend using [Jonathan Levin's Entitlement Database](http://newosxbook.com/ent.jl) which indexes a lot of the juicy Entitlements.
 
-# Summary
+## Summary
 Today we have described `SIP` - what it is, how it's enforced and potential ways for it to be bypasses.  
 We managed to connect this blogpost with the `macOS App Sandbox` blogpost, as well as the `Gatekeeper` blogpost, which is quite nice.
 In future blogposts, I intend to touch other macOS security mechanisms - there are many of them!
