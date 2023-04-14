@@ -94,4 +94,11 @@ What are SIP's responsibilities exactly? [My blogpost from 2021](https://www.mic
 
 ...
 ```
+As you can see, there are different capabilities, including (but not limited to):
+- `CSR_ALLOW_UNTRUSTED_KEXTS`: The ability to load untrusted kernel extensions.
+- `CSR_ALLOW_TASK_FOR_PID`: allowing the `task_for_pid` API, which is the macOS equivalent of the Windows `OpenProcess`. Yes, injection is very different in macOS!
+- `CSR_ALLOW_KERNEL_DEBUGGER`: kernel debugging.
+- `CSR_ALLOW_UNRESTRICTED_NVRAM`: arbitrarily setting `NVRAM variables`.
+- `CSR_ALLOW_UNRESTRICTED_FS`: not enforcing filesystem protections.
 
+I hope you are at least kind of convinced that defeating any of those can defeat SIP as a whole - for example, with kernel debugging you could turn off the SIP protections, with unrestricted `NVRAM variables` you could directly affect the `csr-active-config` variable and so on.
