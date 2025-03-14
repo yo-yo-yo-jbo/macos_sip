@@ -143,6 +143,10 @@ If you have the appetite (and I know you do!) you can read about one such case t
 Entitlements are not `SIP`-focused - and indeed, similar bypasses have been used to bypass other defense-in-depth mechanisms - I will talk about it in the future.  
 If you feel really adventurous you can hunt for injections on various macOS\iOS common binaries and see if you get lucky - I highly recommend using [Jonathan Levin's Entitlement Database](http://newosxbook.com/ent.jl) which indexes a lot of the juicy Entitlements.
 
+## Honorable mention - Banshee malware
+Early this year, CheckPoint have published an [article](https://research.checkpoint.com/2025/banshee-macos-stealer-that-stole-code-from-macos-xprotect/) about a malware sample dubbed "Banshee".  
+This made pretty big headlines due to it using the encryption method that `XProtect Remediator` uses.
+
 ## Summary
 Today we have described `SIP` - what it is, how it's enforced and potential ways for it to be bypasses.  
 We managed to connect this blogpost with the `macOS App Sandbox` blogpost, as well as the `Gatekeeper` blogpost, which is quite nice.
